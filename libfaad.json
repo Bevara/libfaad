@@ -1,0 +1,19 @@
+{
+    "name": "libfaad",
+    "description": "FAAD decoder",
+    "filters": [
+        "faad",
+        "rfadts"
+    ],
+    "help": "This filter decodes AAC streams through faad library.",
+    "support": [
+        "audio"
+    ],
+    "sources": "https://codeload.github.com/Bevara/libfaad/zip/refs/heads/main",
+    "filter_source": {
+        "faad": "dec_faad.c",
+        "rfadts": "reframe_adts.c"
+    },
+    "Format": ["AAC"],
+    "licence_required":false
+}
