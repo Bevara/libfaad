@@ -471,3 +471,10 @@ const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_faad_register(GF_FilterSe
 	return NULL;
 #endif
 }
+
+
+#include "filter_register.h"
+__attribute__((constructor))
+void register_faad(void) {
+    gf_filter_auto_register("faad", dynCall_faad_register);
+}

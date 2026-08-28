@@ -1054,3 +1054,9 @@ const GF_FilterRegister *dynCall_adts_dmx_register(GF_FilterSession *session)
 	return NULL;
 }
 #endif // #if !defined(GPAC_DISABLE_AV_PARSERS) && !defined(GPAC_DISABLE_RFADTS)
+
+#include "filter_register.h"
+__attribute__((constructor))
+void register_adts_dmx(void) {
+    gf_filter_auto_register("adts_dmx", dynCall_adts_dmx_register);
+}
