@@ -463,7 +463,7 @@ GF_FilterRegister FAADRegister = {
 
 #endif
 
-const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_faad_register(GF_FilterSession *session)
+const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE faad_register(GF_FilterSession *session)
 {
 #ifdef GPAC_HAS_FAAD
 	return &FAADRegister;
@@ -476,5 +476,5 @@ const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_faad_register(GF_FilterSe
 #include "filter_register.h"
 __attribute__((constructor))
 void register_faad(void) {
-    gf_filter_auto_register("faad", dynCall_faad_register);
+    gf_filter_auto_register("faad", faad_register);
 }

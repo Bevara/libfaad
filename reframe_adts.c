@@ -1044,12 +1044,12 @@ GF_FilterRegister ADTSDmxRegister = {
 };
 
 
-const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE dynCall_adts_dmx_register(GF_FilterSession *session)
+const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE adts_dmx_register(GF_FilterSession *session)
 {
 	return &ADTSDmxRegister;
 }
 #else
-const GF_FilterRegister *dynCall_adts_dmx_register(GF_FilterSession *session)
+const GF_FilterRegister *adts_dmx_register(GF_FilterSession *session)
 {
 	return NULL;
 }
@@ -1058,5 +1058,5 @@ const GF_FilterRegister *dynCall_adts_dmx_register(GF_FilterSession *session)
 #include "filter_register.h"
 __attribute__((constructor))
 void register_adts_dmx(void) {
-    gf_filter_auto_register("adts_dmx", dynCall_adts_dmx_register);
+    gf_filter_auto_register("adts_dmx", adts_dmx_register);
 }
