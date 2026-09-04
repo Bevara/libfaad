@@ -2,7 +2,7 @@
  *			GPAC - Multimedia Framework C SDK
  *
  *			Authors: Jean Le Feuvre
- *			Copyright (c) Telecom ParisTech 2000-2023
+ *			Copyright (c) Telecom ParisTech 2000-2024
  *					All rights reserved
  *
  *  This file is part of GPAC / AAC FAAD2 decoder filter
@@ -459,6 +459,7 @@ GF_FilterRegister FAADRegister = {
 	.configure_pid = faaddec_configure_pid,
 	.finalize = faaddec_finalize,
 	.process = faaddec_process,
+	.hint_class_type = GF_FS_CLASS_DECODER
 };
 
 #endif
@@ -472,7 +473,7 @@ const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE faad_register(GF_FilterSession *s
 #endif
 }
 
-
+/*Bevara: side modules register their own filters at load time.*/
 #include "filter_register.h"
 __attribute__((constructor))
 void register_faad(void) {

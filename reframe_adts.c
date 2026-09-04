@@ -2,7 +2,7 @@
  *			GPAC - Multimedia Framework C SDK
  *
  *			Authors: Jean Le Feuvre
- *			Copyright (c) Telecom ParisTech 2000-2023
+ *			Copyright (c) Telecom ParisTech 2000-2026
  *					All rights reserved
  *
  *  This file is part of GPAC / AAC ADTS reframer filter
@@ -29,12 +29,11 @@
 
 #if !defined(GPAC_DISABLE_AV_PARSERS) && !defined(GPAC_DISABLE_RFADTS)
 
-enum
-{
+GF_OPT_ENUM (GF_PS_SBRSignalingMode,
 	AAC_SIGNAL_NONE=0,
 	AAC_SIGNAL_IMPLICIT,
-	AAC_SIGNAL_EXPLICIT
-};
+	AAC_SIGNAL_EXPLICIT,
+);
 
 typedef struct
 {
@@ -53,8 +52,8 @@ typedef struct
 	//filter args
 	u32 frame_size;
 	Double index;
-	u32 sbr;
-	u32 ps;
+	GF_PS_SBRSignalingMode sbr;
+	GF_PS_SBRSignalingMode ps;
 //	Bool mpeg4;
 	Bool ovsbr;
 	Bool expart;
@@ -296,7 +295,7 @@ static void adts_dmx_check_dur(GF_Filter *filter, GF_ADTSDmxCtx *ctx)
 
 			gf_filter_pid_set_property(ctx->opid, GF_PROP_PID_DURATION, & PROP_FRAC64(ctx->duration));
 
-			if (duration && !gf_sys_is_test_mode() ) {
+			if (duration) {
 				rate *= 8 * ctx->duration.den;
 				rate /= ctx->duration.num;
 				ctx->bitrate = (u32) rate;
@@ -477,6 +476,7 @@ static Bool adts_dmx_process_event(GF_Filter *filter, const GF_FilterEvent *evt)
 	u32 i;
 	GF_FilterEvent fevt;
 	GF_ADTSDmxCtx *ctx = gf_filter_get_udta(filter);
+	if (!ctx->ipid) return GF_TRUE;
 
 	switch (evt->base.type) {
 	case GF_FEVT_PLAY:
@@ -896,6 +896,10 @@ drop_byte:
 		if (remain) {
 			memmove(ctx->adts_buffer, start, remain);
 		}
+		if (!ctx->src_pck) {
+			ctx->src_pck = pck;
+			gf_filter_pck_ref_props(&ctx->src_pck);
+		}
 		ctx->adts_buffer_size = remain;
 		gf_filter_pid_drop_packet(ctx->ipid);
 	}
@@ -1040,23 +1044,26 @@ GF_FilterRegister ADTSDmxRegister = {
 	.configure_pid = adts_dmx_configure_pid,
 	.process = adts_dmx_process,
 	.probe_data = adts_dmx_probe_data,
-	.process_event = adts_dmx_process_event
+	.process_event = adts_dmx_process_event,
+	.hint_class_type = GF_FS_CLASS_FRAMING
+
 };
 
 
-const GF_FilterRegister * EMSCRIPTEN_KEEPALIVE adts_dmx_register(GF_FilterSession *session)
+const GF_FilterRegister *rfadts_register(GF_FilterSession *session)
 {
 	return &ADTSDmxRegister;
 }
 #else
-const GF_FilterRegister *adts_dmx_register(GF_FilterSession *session)
+const GF_FilterRegister *rfadts_register(GF_FilterSession *session)
 {
 	return NULL;
 }
 #endif // #if !defined(GPAC_DISABLE_AV_PARSERS) && !defined(GPAC_DISABLE_RFADTS)
 
+/*Bevara: side modules register their own filters at load time.*/
 #include "filter_register.h"
 __attribute__((constructor))
 void register_adts_dmx(void) {
-    gf_filter_auto_register("adts_dmx", adts_dmx_register);
+    gf_filter_auto_register("adts_dmx", rfadts_register);
 }
