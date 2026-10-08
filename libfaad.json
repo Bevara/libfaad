@@ -15,5 +15,6 @@
         "rfadts": "reframe_adts.c"
     },
     "Format": ["AAC"],
-    "licence_required":false
+    "licence_required":false,
+    "using": ["solver_minimal_1"]
 }
