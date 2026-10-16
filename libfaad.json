@@ -15,6 +15,10 @@
         "rfadts": "reframe_adts.c"
     },
     "Format": ["AAC"],
-    "licence_required":false,
-    "using": ["solver_minimal_1"]
+    "using": ["solver_minimal_1"],
+    "patents": {
+        "status": "licence-required",
+        "note": "AAC: Via LA",
+        "checked": "2026-10-16"
+    }
 }
