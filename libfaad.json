@@ -1,6 +1,6 @@
 {
     "name": "libfaad",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "FAAD decoder",
     "filters": [
         "faad",
@@ -16,7 +16,7 @@
         "rfadts": "reframe_adts.c"
     },
     "Format": ["AAC"],
-    "using": ["solver_minimal_1", "solver_1"],
+    "using": ["mm_solver_minimal_1.0.1", "mm_solver_1.0.1"],
     "patents": {
         "status": "licence-required",
         "note": "AAC: Via LA",
